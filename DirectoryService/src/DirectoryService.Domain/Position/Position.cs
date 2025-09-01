@@ -26,6 +26,7 @@ public class Position
 
     private Position(
         Name name,
+        string? description,
         List<Guid> departments,
         List<Guid> locations)
     {
@@ -33,17 +34,20 @@ public class Position
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
         Name = name;
+        Description = description;
         Departments = departments;
         Locations = locations;
     }
 
     public static Result<Position> Create(
         Name name,
+        string? description,
         IEnumerable<Guid> departments,
         IEnumerable<Guid> locations)
     {
         return new Position(
             name,
+            description,
             departments.ToList() ?? new List<Guid>(),
             locations.ToList() ?? new List<Guid>());
     }

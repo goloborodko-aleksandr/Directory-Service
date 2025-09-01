@@ -38,9 +38,9 @@ public class Department
 
     public bool IsLeaf => Children.Count == 0;
 
-    public bool IsEmptyPositions => Positions.Count == 0; // nominal
+    public bool IsEmptyPositions => Positions.Count == 0;
 
-    public bool IsEmptyLocations => Locations.Count == 0; // remote work
+    public bool IsEmptyLocations => Locations.Count == 0;
 
     private Department(
         Name name,
@@ -54,8 +54,8 @@ public class Department
         List<Guid> locations)
     {
         Id = Guid.NewGuid();
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
         Name = name;
         Identifier = identifier;
         Path = path;
@@ -74,10 +74,20 @@ public class Department
         Guid? parentId,
         short depth,
         bool isActive,
-        IEnumerable<Department> children,
-        IEnumerable<Guid> positions,
-        IEnumerable<Guid> locations)
+        IEnumerable<Department>? children,
+        IEnumerable<Guid>? positions,
+        IEnumerable<Guid>? locations)
     {
+        if (locations == null)
+        {
+            return Result.Failure<Department>("Location is required");
+        }
+
+        if (positions == null)
+        {
+            return Result.Failure<Department>("Position is required");
+        }
+
         return new Department(
             name,
             identifier,
@@ -85,8 +95,8 @@ public class Department
             parentId,
             depth,
             isActive,
-            children.ToList() ?? new List<Department>(),
-            positions.ToList() ?? new List<Guid>(),
-            locations.ToList() ?? new List<Guid>());
+            children?.ToList() ?? new List<Department>(),
+            positions.ToList(),
+            locations.ToList());
     }
 }

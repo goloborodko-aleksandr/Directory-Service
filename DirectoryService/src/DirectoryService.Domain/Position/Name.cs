@@ -4,8 +4,8 @@ namespace DirectoryService.Domain.Position;
 
 public record Name
 {
-    private const int MIN_LENGTH = 2;
-    private const int MAX_LENGTH = 100;
+    public const int MIN_LENGTH = 3;
+    public const int MAX_LENGTH = 100;
 
     public string Value { get; private set; }
 

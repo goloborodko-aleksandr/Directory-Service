@@ -4,6 +4,8 @@ namespace DirectoryService.Domain.Position;
 
 public class Position
 {
+    public const short DESCRIPTION_MAX_LENGTH = 1500;
+
     public Guid Id { get; private set; }
 
     public Name Name { get; private set; }
@@ -16,9 +18,13 @@ public class Position
 
     public DateTime UpdatedAt { get; private set; }
 
-    public List<Guid> Departments { get; private set; }
+    private List<Guid> _departmens;
 
-    public List<Guid> Locations { get; private set; }
+    private List<Guid> _locations;
+
+    public IReadOnlyList<Guid> Departments => _departmens;
+
+    public IReadOnlyList<Guid> Locations => _locations;
 
     public bool IsEmptyDepartments => Departments.Count == 0;
 
@@ -28,27 +34,46 @@ public class Position
         Name name,
         string? description,
         List<Guid> departments,
-        List<Guid> locations)
+        List<Guid> locations,
+        bool isActive)
     {
         Id = Guid.NewGuid();
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
         Name = name;
         Description = description;
-        Departments = departments;
-        Locations = locations;
+        _departmens = departments;
+        _locations = locations;
+        IsActive = isActive;
     }
 
     public static Result<Position> Create(
         Name name,
         string? description,
-        IEnumerable<Guid> departments,
-        IEnumerable<Guid> locations)
+        IEnumerable<Guid>? departments,
+        IEnumerable<Guid>? locations,
+        bool isActive)
     {
+        if (departments == null)
+        {
+            return Result.Failure<Position>("Departments is required");
+        }
+
+        if (locations == null)
+        {
+            return Result.Failure<Position>("Locations is required");
+        }
+
+        if (description is { Length: >= DESCRIPTION_MAX_LENGTH })
+        {
+            return Result.Failure<Position>("Description is too long");
+        }
+
         return new Position(
             name,
             description,
-            departments.ToList() ?? new List<Guid>(),
-            locations.ToList() ?? new List<Guid>());
+            departments.ToList(),
+            locations.ToList(),
+            isActive);
     }
 }

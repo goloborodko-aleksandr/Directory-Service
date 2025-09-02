@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.ConnectionEntity;
 
-namespace DirectoryService.Domain.PositionInssue;
+namespace DirectoryService.Domain.PositionEntity;
 
 public class Position
 {
@@ -45,14 +45,10 @@ public class Position
         bool isActive)
     {
         if (departmentPositions == null)
-        {
-            return Result.Failure<Position>("PositionIssuesData cannot be null");
-        }
+            return Result.Failure<Position>("departmentPositions cannot be null");
 
-        if (description is { Length: >= DESCRIPTION_MAX_LENGTH })
-        {
+        if (description is { Length: > DESCRIPTION_MAX_LENGTH })
             return Result.Failure<Position>("Description is too long");
-        }
 
         return new Position(
             name,

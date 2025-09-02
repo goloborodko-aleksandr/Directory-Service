@@ -1,35 +1,35 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.DepartmentEntity;
+using DirectoryService.Domain.PositionEntity;
 
 namespace DirectoryService.Domain.ConnectionEntity;
 
 public class DepartmentPosition
 {
-    public List<Guid> DepartmentId { get; private set; }
+    public Guid Id { get; private set; }
 
-    public List<Guid> PositionId { get; private set; }
+    public Department Department { get; private set; }
+
+    public Position Position { get; private set; }
 
     private DepartmentPosition(
-        List<Guid> departmentId,
-        List<Guid> positionId)
+        Department department,
+        Position position)
     {
-        DepartmentId = departmentId;
-        PositionId = positionId;
+        Department = department;
+        Position = position;
     }
 
     public static Result<DepartmentPosition> Create(
-        List<Guid>? departmentId,
-        List<Guid>? positionId)
+        Department? department,
+        Position? position)
     {
-        if (departmentId == null)
-        {
-            return Result.Failure<DepartmentPosition>("DepartmentId cannot be null");
-        }
+        if (department == null)
+            return Result.Failure<DepartmentPosition>("Department cannot be empty");
 
-        if (positionId == null)
-        {
-            return Result.Failure<DepartmentPosition>("PositionId cannot be null");
-        }
+        if (position == null)
+            return Result.Failure<DepartmentPosition>("Position cannot be empty");
 
-        return new DepartmentPosition(departmentId, positionId);
+        return new DepartmentPosition(department, position);
     }
 }

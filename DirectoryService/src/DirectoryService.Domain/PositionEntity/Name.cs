@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace DirectoryService.Domain.PositionInssue;
+namespace DirectoryService.Domain.PositionEntity;
 
 public record Name
 {

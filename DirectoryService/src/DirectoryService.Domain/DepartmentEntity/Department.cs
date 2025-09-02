@@ -37,7 +37,11 @@ public class Department
 
     public bool IsRoot => ParentId == Guid.Empty;
 
-    public bool IsLeaf => Children.Count == 0;
+    public bool IsLeaf => _children.Count == 0;
+
+    public bool EmptyPositions => _departmentPosition.Count == 0;
+
+    public bool EmptyLocations => _departmentLocation.Count == 0;
 
     private Department(
         Name name,

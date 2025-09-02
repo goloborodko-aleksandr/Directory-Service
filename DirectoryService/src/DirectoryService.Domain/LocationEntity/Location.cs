@@ -23,6 +23,8 @@ public class Location
 
     public IReadOnlyList<DepartmentLocation> DepartmentLocations => _departmentLocations;
 
+    public bool EmptyLocations => _departmentLocations.Count == 0;
+
     private Location(
         Name name,
         Address address,

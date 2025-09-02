@@ -23,6 +23,8 @@ public class Position
 
     public IReadOnlyList<DepartmentPosition> DepartmentPositions => _departmentPositions;
 
+    public bool EmptyPositions => _departmentPositions.Count == 0;
+
     private Position(
         Name name,
         string? description,

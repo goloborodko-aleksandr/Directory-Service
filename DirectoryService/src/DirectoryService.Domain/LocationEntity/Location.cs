@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.ConnectionEntity;
 
-namespace DirectoryService.Domain.Location;
+namespace DirectoryService.Domain.LocationEntity;
 
 public class Location
 {
@@ -18,17 +19,15 @@ public class Location
 
     public DateTime UpdatedAt { get; private set; }
 
-    private List<Guid> _departments;
+    private List<DepartmentLocation> _departmentLocations;
 
-    public IReadOnlyList<Guid> Departments => _departments;
-
-    public bool IsEmptyDepartments => _departments.Count == 0;
+    public IReadOnlyList<DepartmentLocation> DepartmentLocations => _departmentLocations;
 
     private Location(
         Name name,
         Address address,
         TimeZone timezone,
-        List<Guid> departments,
+        List<DepartmentLocation> departmentLocations,
         bool isActive)
     {
         Id = Guid.NewGuid();
@@ -37,7 +36,7 @@ public class Location
         Name = name;
         Address = address;
         Timezone = timezone;
-        _departments = departments;
+        _departmentLocations = departmentLocations;
         IsActive = isActive;
     }
 
@@ -45,14 +44,14 @@ public class Location
         Name name,
         Address address,
         TimeZone timezone,
-        IEnumerable<Guid>? departments,
+        List<DepartmentLocation>? departmentLocations,
         bool isActive)
     {
-        if (departments == null)
+        if (departmentLocations == null)
         {
-            return Result.Failure<Location>("Departments is required");
+            return Result.Failure<Location>("departmentLocations cannot be null");
         }
 
-        return Result.Success(new Location(name, address, timezone, departments.ToList(), isActive));
+        return Result.Success(new Location(name, address, timezone, departmentLocations, isActive));
     }
 }

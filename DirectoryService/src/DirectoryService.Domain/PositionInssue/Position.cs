@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.ConnectionEntity;
 
-namespace DirectoryService.Domain.Position;
+namespace DirectoryService.Domain.PositionInssue;
 
 public class Position
 {
@@ -18,23 +19,14 @@ public class Position
 
     public DateTime UpdatedAt { get; private set; }
 
-    private List<Guid> _departmens;
+    private List<DepartmentPosition> _departmentPositions;
 
-    private List<Guid> _locations;
-
-    public IReadOnlyList<Guid> Departments => _departmens;
-
-    public IReadOnlyList<Guid> Locations => _locations;
-
-    public bool IsEmptyDepartments => Departments.Count == 0;
-
-    public bool IsEmptyLocations => Locations.Count == 0;
+    public IReadOnlyList<DepartmentPosition> DepartmentPositions => _departmentPositions;
 
     private Position(
         Name name,
         string? description,
-        List<Guid> departments,
-        List<Guid> locations,
+        List<DepartmentPosition> departmentPositions,
         bool isActive)
     {
         Id = Guid.NewGuid();
@@ -42,26 +34,19 @@ public class Position
         UpdatedAt = DateTime.UtcNow;
         Name = name;
         Description = description;
-        _departmens = departments;
-        _locations = locations;
+        _departmentPositions = departmentPositions;
         IsActive = isActive;
     }
 
     public static Result<Position> Create(
         Name name,
         string? description,
-        IEnumerable<Guid>? departments,
-        IEnumerable<Guid>? locations,
+        List<DepartmentPosition>? departmentPositions,
         bool isActive)
     {
-        if (departments == null)
+        if (departmentPositions == null)
         {
-            return Result.Failure<Position>("Departments is required");
-        }
-
-        if (locations == null)
-        {
-            return Result.Failure<Position>("Locations is required");
+            return Result.Failure<Position>("PositionIssuesData cannot be null");
         }
 
         if (description is { Length: >= DESCRIPTION_MAX_LENGTH })
@@ -72,8 +57,7 @@ public class Position
         return new Position(
             name,
             description,
-            departments.ToList(),
-            locations.ToList(),
+            departmentPositions,
             isActive);
     }
 }

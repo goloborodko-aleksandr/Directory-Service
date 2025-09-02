@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.ConnectionEntity;
 
-namespace DirectoryService.Domain.Department;
+namespace DirectoryService.Domain.DepartmentEntity;
 
 public class Department
 {
@@ -12,7 +13,7 @@ public class Department
 
     public Path Path { get; private set; }
 
-    public Guid? ParentId { get; private set; }
+    public Guid ParentId { get; private set; }
 
     public short Depth { get; private set; }
 
@@ -24,34 +25,30 @@ public class Department
 
     private List<Department> _children;
 
+    private List<DepartmentPosition> _departmentPosition;
+
+    private List<DepartmentLocation> _departmentLocation;
+
     public IReadOnlyList<Department> Children => _children;
 
-    private List<Guid> _positions;
+    public IReadOnlyList<DepartmentPosition> DepartmentPositions => _departmentPosition;
 
-    public IReadOnlyList<Guid> Positions => _positions;
+    public IReadOnlyList<DepartmentLocation> DepartmentLocations => _departmentLocation;
 
-    private List<Guid> _locations;
-
-    public IReadOnlyList<Guid> Locations => _locations;
-
-    public bool IsRoot => ParentId == null;
+    public bool IsRoot => ParentId == Guid.Empty;
 
     public bool IsLeaf => Children.Count == 0;
-
-    public bool IsEmptyPositions => Positions.Count == 0;
-
-    public bool IsEmptyLocations => Locations.Count == 0;
 
     private Department(
         Name name,
         Identifier identifier,
         Path path,
-        Guid? parentId,
+        Guid parentId,
         short depth,
         bool isActive,
         List<Department> children,
-        List<Guid> positions,
-        List<Guid> locations)
+        List<DepartmentPosition> departmentPosition,
+        List<DepartmentLocation> departmentLocation)
     {
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
@@ -63,8 +60,8 @@ public class Department
         Depth = depth;
         IsActive = isActive;
         _children = children;
-        _positions = positions;
-        _locations = locations;
+        _departmentPosition = departmentPosition;
+        _departmentLocation = departmentLocation;
     }
 
     public static Result<Department> Create(
@@ -75,28 +72,28 @@ public class Department
         short depth,
         bool isActive,
         IEnumerable<Department>? children,
-        IEnumerable<Guid>? positions,
-        IEnumerable<Guid>? locations)
+        IEnumerable<DepartmentPosition>? departmentPosition,
+        IEnumerable<DepartmentLocation>? departmentLocation)
     {
-        if (locations == null)
+        if (departmentPosition == null)
         {
-            return Result.Failure<Department>("Location is required");
+            return Result.Failure<Department>("departmentPosition cannot be null");
         }
 
-        if (positions == null)
+        if (departmentLocation == null)
         {
-            return Result.Failure<Department>("Position is required");
+            return Result.Failure<Department>("departmentLocation cannot be null");
         }
 
         return new Department(
             name,
             identifier,
             path,
-            parentId,
+            parentId ?? Guid.Empty,
             depth,
             isActive,
             children?.ToList() ?? new List<Department>(),
-            positions.ToList(),
-            locations.ToList());
+            departmentPosition.ToList(),
+            departmentLocation.ToList());
     }
 }

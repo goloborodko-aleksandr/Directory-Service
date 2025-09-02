@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace DirectoryService.Domain.Position;
+namespace DirectoryService.Domain.LocationEntity;
 
 public record Name
 {
-    public const int MIN_LENGTH = 3;
-    public const int MAX_LENGTH = 100;
+    public const int MIN_LENGTH = 2;
+    public const int MAX_LENGTH = 120;
 
-    public string Value { get; private set; }
+    public readonly string Value;
 
     private Name(string value)
     {
@@ -18,7 +18,7 @@ public record Name
     {
         if (value.Length < MIN_LENGTH || value.Length > MAX_LENGTH || string.IsNullOrWhiteSpace(value))
         {
-            return Result.Failure<Name>("No correct position name");
+            return Result.Failure<Name>("No correct location name");
         }
 
         return Result.Success(new Name(value));

@@ -12,22 +12,12 @@ public class DepartmentLocation
 
     public Location Location { get; private set; }
 
-    private DepartmentLocation(
+    public DepartmentLocation(
         Department department,
         Location location)
     {
         Id = Guid.NewGuid();
         Department = department;
         Location = location;
-    }
-
-    public static Result<DepartmentLocation> Create(
-        Department department,
-        Location location)
-    {
-        if (department == null || location == null)
-            return Result.Failure<DepartmentLocation>("Department or Location cannot be null");
-
-        return new DepartmentLocation(department, location);
     }
 }

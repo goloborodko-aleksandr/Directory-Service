@@ -16,19 +16,17 @@ public class DepartmentPosition
         Department department,
         Position position)
     {
+        Id = Guid.NewGuid();
         Department = department;
         Position = position;
     }
 
     public static Result<DepartmentPosition> Create(
-        Department? department,
-        Position? position)
+        Department department,
+        Position position)
     {
-        if (department == null)
-            return Result.Failure<DepartmentPosition>("Department cannot be empty");
-
-        if (position == null)
-            return Result.Failure<DepartmentPosition>("Position cannot be empty");
+        if (department == null || position == null)
+            return Result.Failure<DepartmentPosition>("Department or Position cannot be null");
 
         return new DepartmentPosition(department, position);
     }

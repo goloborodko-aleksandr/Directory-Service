@@ -13,7 +13,7 @@ public class Department
 
     public Path Path { get; private set; }
 
-    public Guid ParentId { get; private set; }
+    public Guid? ParentId { get; private set; }
 
     public short Depth { get; private set; }
 
@@ -47,7 +47,7 @@ public class Department
         Name name,
         Identifier identifier,
         Path path,
-        Guid parentId,
+        Guid? parentId,
         short depth,
         bool isActive,
         List<Department> children,
@@ -79,18 +79,18 @@ public class Department
         IEnumerable<DepartmentPosition>? departmentPosition,
         IEnumerable<DepartmentLocation>? departmentLocation)
     {
-        if (depth < 0)
+        if (depth <= 0)
             return Result.Failure<Department>("Depth cannot be negative");
 
         return new Department(
             name,
             identifier,
             path,
-            parentId ?? Guid.Empty,
+            parentId,
             depth,
             isActive,
-            children?.ToList() ?? new List<Department>(),
-            departmentPosition?.ToList() ?? new List<DepartmentPosition>(),
-            departmentLocation?.ToList() ?? new List<DepartmentLocation>());
+            children?.ToList() ?? [],
+            departmentPosition?.ToList() ?? [],
+            departmentLocation?.ToList() ?? []);
     }
 }

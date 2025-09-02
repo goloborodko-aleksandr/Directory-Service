@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using DirectoryService.Domain.DepartmentEntity;
+﻿using DirectoryService.Domain.DepartmentEntity;
 using DirectoryService.Domain.PositionEntity;
 
 namespace DirectoryService.Domain.ConnectionEntity;

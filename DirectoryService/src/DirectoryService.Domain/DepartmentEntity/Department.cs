@@ -75,12 +75,6 @@ public class Department
         IEnumerable<DepartmentPosition>? departmentPosition,
         IEnumerable<DepartmentLocation>? departmentLocation)
     {
-        if (departmentPosition == null)
-            return Result.Failure<Department>("departmentPosition cannot be null");
-
-        if (departmentLocation == null)
-            return Result.Failure<Department>("departmentLocation cannot be null");
-
         if (depth < 0)
             return Result.Failure<Department>("Depth cannot be negative");
 
@@ -92,7 +86,7 @@ public class Department
             depth,
             isActive,
             children?.ToList() ?? new List<Department>(),
-            departmentPosition.ToList(),
-            departmentLocation.ToList());
+            departmentPosition?.ToList() ?? new List<DepartmentPosition>(),
+            departmentLocation?.ToList() ?? new List<DepartmentLocation>());
     }
 }

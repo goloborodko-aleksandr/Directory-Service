@@ -6,5 +6,4 @@ namespace DirectoryService.Presentation.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    
 }

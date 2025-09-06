@@ -9,7 +9,7 @@ public class Position
 
     public Guid Id { get; private set; }
 
-    public Name Name { get; private set; }
+    public Name Name { get; private set; } = null!;
 
     public string? Description { get; private set; }
 
@@ -19,11 +19,14 @@ public class Position
 
     public DateTime UpdatedAt { get; private set; }
 
-    private List<DepartmentPosition> _departmentPositions;
+    private List<DepartmentPosition> _departmentPositions = [];
 
     public IReadOnlyList<DepartmentPosition> DepartmentPositions => _departmentPositions;
 
     public bool EmptyPositions => _departmentPositions.Count == 0;
+
+    // EF Core
+    private Position() { }
 
     private Position(
         Name name,
@@ -43,19 +46,16 @@ public class Position
     public static Result<Position> Create(
         Name name,
         string? description,
-        List<DepartmentPosition>? departmentPositions,
+        IEnumerable<DepartmentPosition> departmentPositions,
         bool isActive)
     {
-        if (departmentPositions == null)
-            return Result.Failure<Position>("departmentPositions cannot be null");
-
         if (description is { Length: > DESCRIPTION_MAX_LENGTH })
             return Result.Failure<Position>("Description is too long");
 
         return new Position(
             name,
             description,
-            departmentPositions,
+            departmentPositions.ToList(),
             isActive);
     }
 }

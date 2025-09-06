@@ -7,11 +7,11 @@ public class Location
 {
     public Guid Id { get; private set; }
 
-    public Name Name { get; private set; }
+    public Name Name { get; private set; } = null!;
 
-    public Address Address { get; private set; }
+    public Address Address { get; private set; } = null!;
 
-    public TimeZone Timezone { get; private set; }
+    public TimeZone Timezone { get; private set; } = null!;
 
     public bool IsActive { get; private set; }
 
@@ -19,13 +19,16 @@ public class Location
 
     public DateTime UpdatedAt { get; private set; }
 
-    private List<DepartmentLocation> _departmentLocations;
+    private List<DepartmentLocation> _departmentLocations = [];
 
     public IReadOnlyList<DepartmentLocation> DepartmentLocations => _departmentLocations;
 
     public bool EmptyLocations => _departmentLocations.Count == 0;
 
-    private Location(
+    // EF Core
+    private Location() { }
+
+    public Location(
         Name name,
         Address address,
         TimeZone timezone,
@@ -46,14 +49,9 @@ public class Location
         Name name,
         Address address,
         TimeZone timezone,
-        List<DepartmentLocation>? departmentLocations,
+        IEnumerable<DepartmentLocation> departmentLocations,
         bool isActive)
     {
-        if (departmentLocations == null)
-        {
-            return Result.Failure<Location>("departmentLocations cannot be null");
-        }
-
-        return Result.Success(new Location(name, address, timezone, departmentLocations, isActive));
+        return Result.Success(new Location(name, address, timezone, departmentLocations.ToList(), isActive));
     }
 }

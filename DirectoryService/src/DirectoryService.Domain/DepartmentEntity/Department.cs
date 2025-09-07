@@ -7,11 +7,11 @@ public class Department
 {
     public Guid Id { get; private set; }
 
-    public Name Name { get; private set; }
+    public Name Name { get; private set; } = null!;
 
-    public Identifier Identifier { get; private set; }
+    public Identifier Identifier { get; private set; } = null!;
 
-    public Path Path { get; private set; }
+    public Path Path { get; private set; } = null!;
 
     public Guid? ParentId { get; private set; }
 
@@ -23,11 +23,11 @@ public class Department
 
     public DateTime UpdatedAt { get; private set; }
 
-    private List<Department> _children;
+    private List<Department> _children = [];
 
-    private List<DepartmentPosition> _departmentPosition;
+    private List<DepartmentPosition> _departmentPosition = [];
 
-    private List<DepartmentLocation> _departmentLocation;
+    private List<DepartmentLocation> _departmentLocation = [];
 
     public IReadOnlyList<Department> Children => _children;
 
@@ -35,13 +35,16 @@ public class Department
 
     public IReadOnlyList<DepartmentLocation> DepartmentLocations => _departmentLocation;
 
-    public bool IsRoot => ParentId == Guid.Empty;
+    public bool IsRoot => ParentId == null;
 
     public bool IsLeaf => _children.Count == 0;
 
     public bool EmptyPositions => _departmentPosition.Count == 0;
 
     public bool EmptyLocations => _departmentLocation.Count == 0;
+
+    // EF Core
+    private Department() { }
 
     private Department(
         Name name,
@@ -75,9 +78,9 @@ public class Department
         Guid? parentId,
         short depth,
         bool isActive,
-        IEnumerable<Department>? children,
-        IEnumerable<DepartmentPosition>? departmentPosition,
-        IEnumerable<DepartmentLocation>? departmentLocation)
+        IEnumerable<Department> children,
+        IEnumerable<DepartmentPosition> departmentPosition,
+        IEnumerable<DepartmentLocation> departmentLocation)
     {
         if (depth <= 0)
             return Result.Failure<Department>("Depth cannot be negative");
@@ -89,8 +92,8 @@ public class Department
             parentId,
             depth,
             isActive,
-            children?.ToList() ?? [],
-            departmentPosition?.ToList() ?? [],
-            departmentLocation?.ToList() ?? []);
+            children.ToList(),
+            departmentPosition.ToList(),
+            departmentLocation.ToList());
     }
 }

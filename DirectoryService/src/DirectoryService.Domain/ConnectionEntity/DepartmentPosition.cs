@@ -7,9 +7,12 @@ public class DepartmentPosition
 {
     public Guid Id { get; private set; }
 
-    public Department Department { get; private set; }
+    public Department Department { get; private set; } = null!;
 
-    public Position Position { get; private set; }
+    public Position Position { get; private set; } = null!;
+
+    // EF Core
+    private DepartmentPosition() { }
 
     public DepartmentPosition(
         Department department,

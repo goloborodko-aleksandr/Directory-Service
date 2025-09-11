@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DirectoryService.Application.Validations.Location;
 
-public class AddressDtoValidator : AbstractValidator<AddressDto>
+public class AddressValidator : AbstractValidator<AddressDto>
 {
-    public AddressDtoValidator()
+    public AddressValidator()
     {
         RuleFor(x => x.Country)
             .NotEmpty()

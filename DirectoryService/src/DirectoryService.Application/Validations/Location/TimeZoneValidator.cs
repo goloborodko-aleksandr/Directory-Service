@@ -4,9 +4,9 @@ using NodaTime;
 
 namespace DirectoryService.Application.Validations.Location;
 
-public class TimeZoneDtoValidator: AbstractValidator<TimeZoneDto>
+public class TimeZoneValidator: AbstractValidator<TimeZoneDto>
 {
-    private TimeZoneDtoValidator()
+    public TimeZoneValidator()
     {
         RuleFor(x => x.Value)
             .NotEmpty().WithMessage("Not empty")

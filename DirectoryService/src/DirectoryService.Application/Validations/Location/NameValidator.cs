@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DirectoryService.Application.Validations.Location;
 
-public class NameDtoValidator : AbstractValidator<NameDto>
+public class NameValidator : AbstractValidator<NameDto>
 {
-    private NameDtoValidator()
+    public NameValidator()
     {
         RuleFor(x => x.Value).NotEmpty().WithMessage("Not empty");
     }

@@ -48,7 +48,7 @@ public class AddressValidator : AbstractValidator<AddressDto>
             .WithMessage("Apartment should contain only Latin letters, numbers or ./-");
 
         RuleFor(x => x.ZipCode)
-            .Matches("^[a-zA-Z0-9]+$")
+            .Matches("^[a-zA-Z0-9-]+$")
             .When(x => !string.IsNullOrEmpty(x.ZipCode))
             .WithMessage("ZipCode should contain only numbers and Latin letters");
     }

@@ -91,7 +91,7 @@ public record Address
         if (apartment != null && !isLatinNumbersSymbols(apartment))
             return Result.Failure<Address>("Apartment should contain only Latin letters, numbers or ./-");
 
-        if (zipCode != null && !Regex.IsMatch(zipCode, "^[a-zA-Z0-9]+$"))
+        if (zipCode != null && !Regex.IsMatch(zipCode, "^[a-zA-Z0-9-]+$"))
             return Result.Failure<Address>("ZipCode should contain only numbers and Latin letters");
 
         return Result.Success(new Address(

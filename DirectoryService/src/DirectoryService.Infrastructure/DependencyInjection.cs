@@ -5,20 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DirectoryService.Infrastructure;
 
-public class DependencyInjection
+public static class DependencyInjection
 {
-    private readonly IServiceCollection _serviceCollection;
-    private readonly IConfiguration _configuration;
-
-    private DependencyInjection(IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection serviceCollection,
+        IConfiguration configuration)
     {
-        _serviceCollection = serviceCollection;
-        _configuration = configuration;
-
-        string connectionString = _configuration.GetConnectionString("DirectoryServiceDb")!;
-
-        _serviceCollection
-            .AddScoped<DirectoryServiceDbContext>(_ => new DirectoryServiceDbContext(connectionString));
-        _serviceCollection.AddScoped<ILocationsRepository, LocationsRepository>();
+        string connectionString = configuration.GetConnectionString("DirectoryServiceDb")!;
+        serviceCollection.AddScoped<DirectoryServiceDbContext>(_ => new DirectoryServiceDbContext(connectionString));
+        serviceCollection.AddScoped<ILocationsRepository, LocationsRepository>();
+        return serviceCollection;
     }
 }

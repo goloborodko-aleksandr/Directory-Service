@@ -1,16 +1,11 @@
-using DirectoryService.Infrastructure;
+using DirectoryService.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-builder.Services.AddControllers();
-
-builder.Services.AddOpenApi();
+builder.Services.AddProgram(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -18,5 +13,4 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
 app.Run();

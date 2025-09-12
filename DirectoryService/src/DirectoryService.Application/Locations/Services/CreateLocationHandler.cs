@@ -1,4 +1,5 @@
-﻿using DirectoryService.Application.Locations.Repositories;
+﻿using CSharpFunctionalExtensions;
+using DirectoryService.Application.Locations.Repositories;
 using DirectoryService.Contracts.Locations;
 using DirectoryService.Domain.LocationEntity;
 using FluentValidation;
@@ -17,15 +18,14 @@ public class CreateLocationHandler
         _validator = validator;
     }
 
-    public async Task Handle(CreateLocationDto createLocationDto, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateLocationDto createLocationDto, CancellationToken cancellationToken)
     {
         var validatorResult = await _validator.ValidateAsync(createLocationDto, cancellationToken);
 
         if (!validatorResult.IsValid)
         {
             validatorResult.Errors.ForEach(i => Console.WriteLine(i.ErrorMessage));
-            Console.WriteLine(validatorResult.Errors);
-            return;
+            return Result.Failure<Guid>("Validation failed");
         }
 
         var name = Name.Create(createLocationDto.Name.Value);
@@ -42,6 +42,6 @@ public class CreateLocationHandler
             additionalInfo: createLocationDto.Address.AdditionalInfo);
         var timeZone = TimeZone.Create(createLocationDto.TimeZone.Value);
         var location = Location.Create(name.Value, address.Value, timeZone.Value, createLocationDto.DepartmentLocations, createLocationDto.IsActive);
-        var locationId = await _locationsRepository.AddAsync(location.Value, cancellationToken);
+        return await _locationsRepository.AddAsync(location.Value, cancellationToken);
     }
 }

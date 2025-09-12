@@ -13,7 +13,12 @@ public class LocationsController : ControllerBase
         [FromBody] CreateLocationDto createLocationDto,
         [FromServices] CreateLocationHandler createLocationHandler, CancellationToken cancellationToken)
     {
-        await createLocationHandler.Handle(createLocationDto, cancellationToken);
-        return Ok();
+        var result = await createLocationHandler.Handle(createLocationDto, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 }

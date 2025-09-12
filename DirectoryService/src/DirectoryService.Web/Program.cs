@@ -1,19 +1,16 @@
+using DirectoryService.Application;
 using DirectoryService.Infrastructure;
+using DirectoryService.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-builder.Services.AddControllers();
-
-builder.Services.AddOpenApi();
-builder
-    .Services
-    .AddScoped<DirectoryServiceDbContext>(_ => new DirectoryServiceDbContext(builder.Configuration.GetConnectionString("DirectoryServiceDb")!));
+builder.Services.AddWeb();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -21,5 +18,4 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
 app.Run();

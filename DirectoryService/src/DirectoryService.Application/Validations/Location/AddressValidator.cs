@@ -14,7 +14,7 @@ public class AddressValidator : AbstractValidator<AddressDto>
 
         RuleFor(x => x.Region)
             .NotEmpty()
-            .Matches("^[A-Z][a-zA-Z]*$")
+            .Matches(@"^([A-Z][a-zA-Z]*)(\s[A-Z][a-zA-Z]*)*$")
             .WithMessage("Region name should be in Latin and start with uppercase letter");
 
         RuleFor(x => x.City)

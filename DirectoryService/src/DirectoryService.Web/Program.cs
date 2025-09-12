@@ -1,8 +1,13 @@
+using DirectoryService.Application;
+using DirectoryService.Infrastructure;
 using DirectoryService.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddProgram(builder.Configuration);
+builder.Services.AddWeb();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using DirectoryService.Contracts.Locations;
+﻿using DirectoryService.Application.Locations.Repositories;
+using DirectoryService.Contracts.Locations;
 using DirectoryService.Domain.LocationEntity;
 using FluentValidation;
 using TimeZone = DirectoryService.Domain.LocationEntity.TimeZone;

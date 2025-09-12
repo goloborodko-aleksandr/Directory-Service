@@ -1,11 +1,11 @@
-﻿using DirectoryService.Application.Locations;
+﻿using DirectoryService.Application.Locations.Repositories;
 using DirectoryService.Domain.LocationEntity;
 
 namespace DirectoryService.Infrastructure.Repositories;
 
 public class LocationsRepository : ILocationsRepository
 {
-    public DirectoryServiceDbContext _dbContext;
+    private DirectoryServiceDbContext _dbContext;
 
     public LocationsRepository(DirectoryServiceDbContext dbContext)
     {
@@ -14,7 +14,7 @@ public class LocationsRepository : ILocationsRepository
 
     public async Task<Guid> AddAsync(Location location, CancellationToken cancellationToken)
     {
-        _dbContext.Locations.Add(location);
+        await _dbContext.Locations.AddAsync(location);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return location.Id;
     }

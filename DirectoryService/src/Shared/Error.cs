@@ -19,4 +19,5 @@ public record Error
     public static Error NotFound(string? code, Guid? id, string message) => new(code ?? "record.not.found", message, ErrorType.NOT_FOUND);
     public static Error Failure(string? code, string message) => new(code ?? "failure", message, ErrorType.FAILURE);
     public static Error Conflict(string? code, string message) => new(code ?? "conflict", message, ErrorType.CONFLICT);
+    public Failure ToFailure() => this;
 }

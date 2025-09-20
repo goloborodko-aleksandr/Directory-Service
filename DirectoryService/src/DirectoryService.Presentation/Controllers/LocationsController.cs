@@ -1,5 +1,6 @@
 using DirectoryService.Application.Locations.Services;
 using DirectoryService.Contracts.Locations;
+using DirectoryService.Presentation.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Presentation.Controllers;
@@ -16,7 +17,7 @@ public class LocationsController : ControllerBase
         var result = await createLocationHandler.Handle(createLocationDto, cancellationToken);
         if (result.IsFailure)
         {
-            return BadRequest(result.Error);
+            return result.Error.ToResponse();
         }
 
         return Ok(result.Value);

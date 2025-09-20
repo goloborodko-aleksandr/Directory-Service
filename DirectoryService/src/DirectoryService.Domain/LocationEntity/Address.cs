@@ -70,7 +70,7 @@ public record Address
         if (!isLatin(country) || !char.IsUpper(country.First()))
             return Result.Failure<Address>("Country name should be in Latin and start with uppercase letter");
 
-        if (!isLatin(region) || !char.IsUpper(region.First()))
+        if (Regex.IsMatch(region, @"^([A-Z][a-zA-Z]*)(\s[A-Z][a-zA-Z]*)*$"))
             return Result.Failure<Address>("Region name should be in Latin and start with uppercase letter");
 
         if (!isLatin(city) || !char.IsUpper(city.First()))

@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.ConnectionEntity;
+using Shared;
 
 namespace DirectoryService.Domain.PositionEntity;
 
-public class Position
+public sealed class Position
 {
     public const short DESCRIPTION_MAX_LENGTH = 1500;
 
@@ -43,14 +44,14 @@ public class Position
         IsActive = isActive;
     }
 
-    public static Result<Position> Create(
+    public static Result<Position, Failure> Create(
         Name name,
         string? description,
         IEnumerable<DepartmentPosition> departmentPositions,
         bool isActive)
     {
         if (description is { Length: > DESCRIPTION_MAX_LENGTH })
-            return Result.Failure<Position>("Description is too long");
+            return GeneralError.ValueIsInvalid("description position").ToFailure();
 
         return new Position(
             name,

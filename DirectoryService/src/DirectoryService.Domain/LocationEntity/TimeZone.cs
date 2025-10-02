@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.LocationEntity;
 
-public record TimeZone
+public sealed record TimeZone
 {
     public string Value { get; }
 
@@ -12,13 +13,13 @@ public record TimeZone
         Value = value;
     }
 
-    public static Result<TimeZone> Create(string value)
+    public static Result<TimeZone, Failure> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return Result.Failure<TimeZone>("No correct time zone");
+            return GeneralError.ValueIsInvalid("location time zone").ToFailure();
         }
 
-        return Result.Success(new TimeZone(value));
+        return new TimeZone(value);
     }
 }

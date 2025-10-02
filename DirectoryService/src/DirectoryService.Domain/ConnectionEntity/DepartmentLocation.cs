@@ -3,7 +3,7 @@ using DirectoryService.Domain.LocationEntity;
 
 namespace DirectoryService.Domain.ConnectionEntity;
 
-public class DepartmentLocation
+public sealed class DepartmentLocation
 {
     public Guid Id { get; private set; }
 

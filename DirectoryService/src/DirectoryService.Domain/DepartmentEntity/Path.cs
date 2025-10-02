@@ -1,24 +1,26 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.DepartmentEntity;
 
-public record Path
+public sealed record Path
 {
+    private readonly char _separator = '/';
     public string Value { get; }
 
-    private Path(string value)
+    private Path(Identifier? parentIdentitifier, Identifier identifier)
     {
-        Value = value;
+        Value = parentIdentitifier != null ? parentIdentitifier.Value + _separator + identifier : identifier.Value;
     }
 
-    public static Result<Path> Create(string value)
+    public static Result<Path, Failure> Create(Identifier? parentIdentitifier, Identifier identifier)
     {
-        if (string.IsNullOrWhiteSpace(value) || Regex.IsMatch(value, "^[a-zA-Z0-9.-]*$"))
+        if (string.IsNullOrWhiteSpace(identifier.Value) || Regex.IsMatch(identifier.Value, "^[a-zA-Z0-9.-]*$"))
         {
-            return Result.Failure<Path>("No correct department path");
+            return GeneralError.ValueIsInvalid("department path").ToFailure();
         }
 
-        return Result.Success(new Path(value));
+        return new Path(parentIdentitifier, identifier);
     }
 }

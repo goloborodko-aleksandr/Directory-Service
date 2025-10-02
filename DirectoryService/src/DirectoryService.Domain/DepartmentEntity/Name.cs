@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.DepartmentEntity;
 
-public record Name
+public sealed record Name
 {
     public const short MIN_LENGTH = 3;
     public const short MAX_LENGTH = 150;
@@ -14,13 +15,13 @@ public record Name
         Value = value;
     }
 
-    public static Result<Name> Create(string value)
+    public static Result<Name, Failure> Create(string value)
     {
         if (value.Length < MIN_LENGTH || value.Length > MAX_LENGTH || string.IsNullOrWhiteSpace(value))
         {
-            return Result.Failure<Name>("No correct department name");
+            return GeneralError.ValueIsInvalid("Department name").ToFailure();
         }
 
-        return Result.Success(new Name(value));
+        return new Name(value);
     }
 };

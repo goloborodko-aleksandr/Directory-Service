@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.LocationEntity;
 
-public record Name
+public sealed record Name
 {
     public const int MIN_LENGTH = 2;
     public const int MAX_LENGTH = 120;
@@ -14,13 +15,13 @@ public record Name
         Value = value;
     }
 
-    public static Result<Name> Create(string value)
+    public static Result<Name, Failure> Create(string value)
     {
         if (value.Length < MIN_LENGTH || value.Length > MAX_LENGTH || string.IsNullOrWhiteSpace(value))
         {
-            return Result.Failure<Name>("No correct location name");
+            return GeneralError.ValueIsInvalid("location name").ToFailure();
         }
 
-        return Result.Success(new Name(value));
+        return new Name(value);
     }
 }

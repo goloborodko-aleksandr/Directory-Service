@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.LocationEntity;
 
-public record Address
+public sealed record Address
 {
     public string Country { get; } // Страна
 
@@ -49,7 +50,7 @@ public record Address
         AdditionalInfo = additionalInfo;
     }
 
-    public static Result<Address> Create(
+    public static Result<Address, Failure> Create(
         string country,
         string region,
         string city,
@@ -68,35 +69,35 @@ public record Address
             !string.IsNullOrEmpty(value) && Regex.IsMatch(value, "^[a-zA-Z0-9./-]+$"));
 
         if (!isLatin(country) || !char.IsUpper(country.First()))
-            return Result.Failure<Address>("Country name should be in Latin and start with uppercase letter");
+            return GeneralError.ValueIsInvalid("country").ToFailure();
 
         if (Regex.IsMatch(region, @"^([A-Z][a-zA-Z]*)(\s[A-Z][a-zA-Z]*)*$"))
-            return Result.Failure<Address>("Region name should be in Latin and start with uppercase letter");
+            return GeneralError.ValueIsInvalid("region").ToFailure();
 
         if (!isLatin(city) || !char.IsUpper(city.First()))
-            return Result.Failure<Address>("City name should be in Latin and start with uppercase letter");
+            return GeneralError.ValueIsInvalid("city").ToFailure();
 
         if (!isLatin(street) || !char.IsUpper(street.First()))
-            return Result.Failure<Address>("Street name should be in Latin and start with uppercase letter");
+            return GeneralError.ValueIsInvalid("street").ToFailure();
 
         if (district != null && (!isLatin(district) || !char.IsUpper(district.First())))
-            return Result.Failure<Address>("District name should be in Latin and start with uppercase letter");
+            return GeneralError.ValueIsInvalid("district").ToFailure();
 
         if (houseNumber != null && !isLatinNumbersSymbols(houseNumber))
-            return Result.Failure<Address>("HouseNumber should contain only Latin letters, numbers or ./-");
+            return GeneralError.ValueIsInvalid("houseNumber").ToFailure();
 
         if (building != null && !isLatinNumbersSymbols(building))
-            return Result.Failure<Address>("Building should contain only Latin letters, numbers or ./-");
+            return GeneralError.ValueIsInvalid("building").ToFailure();
 
         if (apartment != null && !isLatinNumbersSymbols(apartment))
-            return Result.Failure<Address>("Apartment should contain only Latin letters, numbers or ./-");
+            return GeneralError.ValueIsInvalid("apartment").ToFailure();
 
         if (zipCode != null && !Regex.IsMatch(zipCode, "^[a-zA-Z0-9-]+$"))
-            return Result.Failure<Address>("ZipCode should contain only numbers and Latin letters");
+            return GeneralError.ValueIsInvalid("zipCode").ToFailure();
 
-        return Result.Success(new Address(
+        return new Address(
             country, region, city, street,
             district, houseNumber, building, apartment,
-            zipCode, additionalInfo));
+            zipCode, additionalInfo);
     }
 }

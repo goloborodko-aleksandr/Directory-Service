@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.ConnectionEntity;
+using Shared;
 
 namespace DirectoryService.Domain.DepartmentEntity;
 
-public class Department
+public sealed class Department
 {
     public Guid Id { get; private set; }
 
@@ -71,7 +72,7 @@ public class Department
         _departmentLocation = departmentLocation;
     }
 
-    public static Result<Department> Create(
+    public static Result<Department, Failure> Create(
         Name name,
         Identifier identifier,
         Path path,
@@ -83,7 +84,7 @@ public class Department
         IEnumerable<DepartmentLocation> departmentLocation)
     {
         if (depth <= 0)
-            return Result.Failure<Department>("Depth cannot be negative");
+            return GeneralError.ValueIsInvalid("depth").ToFailure();
 
         return new Department(
             name,

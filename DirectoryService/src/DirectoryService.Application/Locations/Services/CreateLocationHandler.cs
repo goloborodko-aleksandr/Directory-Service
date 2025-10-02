@@ -9,7 +9,7 @@ using TimeZone = DirectoryService.Domain.LocationEntity.TimeZone;
 
 namespace DirectoryService.Application.Locations.Services;
 
-public class CreateLocationHandler
+public sealed class CreateLocationHandler
 {
     private readonly ILocationsRepository _locationsRepository;
     private readonly IValidator<CreateLocationDto> _validator;
@@ -30,6 +30,7 @@ public class CreateLocationHandler
         }
 
         var name = Name.Create(createLocationDto.Name.Value);
+
         var address = Address.Create(
             country: createLocationDto.Address.Country,
             region: createLocationDto.Address.Region,
@@ -41,8 +42,11 @@ public class CreateLocationHandler
             apartment: createLocationDto.Address.Apartment,
             zipCode: createLocationDto.Address.ZipCode,
             additionalInfo: createLocationDto.Address.AdditionalInfo);
+
         var timeZone = TimeZone.Create(createLocationDto.TimeZone.Value);
+
         var location = Location.Create(name.Value, address.Value, timeZone.Value, createLocationDto.DepartmentLocations, createLocationDto.IsActive);
+
         return await _locationsRepository.AddAsync(location.Value, cancellationToken);
     }
 }

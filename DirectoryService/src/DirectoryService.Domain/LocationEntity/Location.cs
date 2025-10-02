@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.ConnectionEntity;
+using Shared;
 
 namespace DirectoryService.Domain.LocationEntity;
 
-public class Location
+public sealed class Location
 {
     public Guid Id { get; private set; }
 
@@ -52,6 +53,6 @@ public class Location
         IEnumerable<DepartmentLocation> departmentLocations,
         bool isActive)
     {
-        return Result.Success(new Location(name, address, timezone, departmentLocations.ToList(), isActive));
+        return new Location(name, address, timezone, departmentLocations.ToList(), isActive);
     }
 }

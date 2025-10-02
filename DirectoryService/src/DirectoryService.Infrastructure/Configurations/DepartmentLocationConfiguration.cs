@@ -1,5 +1,4 @@
 ﻿using DirectoryService.Domain.ConnectionEntity;
-using DirectoryService.Domain.DepartmentEntity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

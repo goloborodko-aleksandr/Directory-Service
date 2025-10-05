@@ -9,6 +9,9 @@ public sealed record Path
     private readonly char _separator = '/';
     public string Value { get; }
 
+    // EF Core
+    private Path() { }
+
     private Path(Identifier? parentIdentitifier, Identifier identifier)
     {
         Value = parentIdentitifier != null ? parentIdentitifier.Value + _separator + identifier : identifier.Value;

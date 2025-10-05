@@ -46,7 +46,7 @@ public sealed class Location
         IsActive = isActive;
     }
 
-    public static Result<Location> Create(
+    public static Result<Location, Failure> Create(
         Name name,
         Address address,
         TimeZone timezone,

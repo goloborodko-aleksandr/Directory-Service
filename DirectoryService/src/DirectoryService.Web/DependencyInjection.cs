@@ -1,6 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using DirectoryService.Application;
-using DirectoryService.Infrastructure;
 
 namespace DirectoryService.Web;
 

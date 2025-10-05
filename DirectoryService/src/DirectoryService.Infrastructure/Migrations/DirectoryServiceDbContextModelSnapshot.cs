@@ -42,7 +42,7 @@ namespace DirectoryService.Infrastructure.Migrations
 
                     b.HasIndex("location_id");
 
-                    b.ToTable("DepartmentLocation");
+                    b.ToTable("DepartmentLocations");
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.ConnectionEntity.DepartmentPosition", b =>
@@ -64,7 +64,7 @@ namespace DirectoryService.Infrastructure.Migrations
 
                     b.HasIndex("position_id");
 
-                    b.ToTable("DepartmentPosition");
+                    b.ToTable("DepartmentPositions");
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.DepartmentEntity.Department", b =>
@@ -311,8 +311,7 @@ namespace DirectoryService.Infrastructure.Migrations
                     b.HasOne("DirectoryService.Domain.DepartmentEntity.Department", null)
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.DepartmentEntity.Department", b =>

@@ -17,7 +17,7 @@ public sealed record Name
 
     public static Result<Name, Failure> Create(string value)
     {
-        if (value.Length < MIN_LENGTH || value.Length > MAX_LENGTH || string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(value) || value.Length < MIN_LENGTH || value.Length > MAX_LENGTH)
         {
             return GeneralError.ValueIsInvalid("position name").ToFailure();
         }

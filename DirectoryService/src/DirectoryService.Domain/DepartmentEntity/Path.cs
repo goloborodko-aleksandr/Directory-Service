@@ -19,7 +19,12 @@ public sealed record Path
 
     public static Result<Path, Failure> Create(Identifier? parentIdentitifier, Identifier identifier)
     {
-        if (string.IsNullOrWhiteSpace(identifier.Value) || Regex.IsMatch(identifier.Value, "^[a-zA-Z0-9.-]*$"))
+        if (string.IsNullOrWhiteSpace(identifier.Value) || !Regex.IsMatch(identifier.Value, "^[a-zA-Z0-9.-]*$"))
+        {
+            return GeneralError.ValueIsInvalid("department path").ToFailure();
+        }
+
+        if (parentIdentitifier != null && !Regex.IsMatch(parentIdentitifier.Value, "^[a-zA-Z0-9.-]*$"))
         {
             return GeneralError.ValueIsInvalid("department path").ToFailure();
         }

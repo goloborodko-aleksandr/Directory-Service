@@ -30,6 +30,7 @@ public sealed class CreateLocationHandler
         }
 
         var name = Name.Create(createLocationDto.Name.Value);
+        if(name.IsFailure) return name.Error;
 
         var address = Address.Create(
             country: createLocationDto.Address.Country,
@@ -42,10 +43,13 @@ public sealed class CreateLocationHandler
             apartment: createLocationDto.Address.Apartment,
             zipCode: createLocationDto.Address.ZipCode,
             additionalInfo: createLocationDto.Address.AdditionalInfo);
+        if (address.IsFailure) return name.Error;
 
         var timeZone = TimeZone.Create(createLocationDto.TimeZone.Value);
+        if(timeZone.IsFailure) return timeZone.Error;
 
         var location = Location.Create(name.Value, address.Value, timeZone.Value, createLocationDto.DepartmentLocations, createLocationDto.IsActive);
+        if(location.IsFailure) return location.Error;
 
         return await _locationsRepository.AddAsync(location.Value, cancellationToken);
     }

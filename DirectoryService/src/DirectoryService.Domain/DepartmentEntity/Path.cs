@@ -9,6 +9,9 @@ public sealed record Path
     private readonly char _separator = '/';
     public string Value { get; }
 
+    // EF Core
+    private Path() { }
+
     private Path(Identifier? parentIdentitifier, Identifier identifier)
     {
         Value = parentIdentitifier != null ? parentIdentitifier.Value + _separator + identifier : identifier.Value;
@@ -16,7 +19,12 @@ public sealed record Path
 
     public static Result<Path, Failure> Create(Identifier? parentIdentitifier, Identifier identifier)
     {
-        if (string.IsNullOrWhiteSpace(identifier.Value) || Regex.IsMatch(identifier.Value, "^[a-zA-Z0-9.-]*$"))
+        if (string.IsNullOrWhiteSpace(identifier.Value) || !Regex.IsMatch(identifier.Value, "^[a-zA-Z0-9.-]*$"))
+        {
+            return GeneralError.ValueIsInvalid("department path").ToFailure();
+        }
+
+        if (parentIdentitifier != null && !Regex.IsMatch(parentIdentitifier.Value, "^[a-zA-Z0-9.-]*$"))
         {
             return GeneralError.ValueIsInvalid("department path").ToFailure();
         }

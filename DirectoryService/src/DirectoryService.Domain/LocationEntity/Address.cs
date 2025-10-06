@@ -71,7 +71,7 @@ public sealed record Address
         if (!isLatin(country) || !char.IsUpper(country.First()))
             return GeneralError.ValueIsInvalid("country").ToFailure();
 
-        if (Regex.IsMatch(region, @"^([A-Z][a-zA-Z]*)(\s[A-Z][a-zA-Z]*)*$"))
+        if (!Regex.IsMatch(region, @"^([A-Z][a-zA-Z]*)(\s[A-Z][a-zA-Z]*)*$"))
             return GeneralError.ValueIsInvalid("region").ToFailure();
 
         if (!isLatin(city) || !char.IsUpper(city.First()))

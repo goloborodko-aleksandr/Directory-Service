@@ -15,11 +15,7 @@ public class LocationsController : ControllerBase
         [FromServices] CreateLocationHandler createLocationHandler, CancellationToken cancellationToken)
     {
         var result = await createLocationHandler.Handle(createLocationDto, cancellationToken);
-        if (result.IsFailure)
-        {
-            return result.Error.ToResponse();
-        }
-
-        return Ok(result.Value);
+        return result.ToResponseResult();
     }
+
 }
